@@ -223,7 +223,7 @@ function processMethodList(data) {
   for (let key in data.methods) {
     let method = data.methods[key];
     let httpMethod = method.httpMethod.toLowerCase();
-    let path = method.flatPath;
+    let path = method.flatPath || method.path;
 
     const pathUri = new URI(path);
 
@@ -344,7 +344,7 @@ function processParameterList(method, templatePathParams) {
   let paramOrder = method.parameterOrder || {};
   
   parameters = _.pickBy(parameters, (p, name) => {
-    return p.description.indexOf("Deprecated. ") == -1 && p.location !== "path";
+    return (p.description && p.description.indexOf("Deprecated. ") == -1) && p.location !== "path";
   });
 
   paramOrder = _.filter(paramOrder, (name) => {
